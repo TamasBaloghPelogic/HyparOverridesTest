@@ -22,6 +22,11 @@ namespace OverrideTraining
               new[] {
                 new Extrude(rectangle, height, Vector3.ZAxis, false)
                 });
+
+            // 1. Create an intermediate collection to store any 
+            // elements that might be overridden
+            List<ServiceCore> allCores = new List<ServiceCore>();
+
             ServiceCore core = new ServiceCore(
               rectangle,
               elevation: 0,
@@ -32,7 +37,41 @@ namespace OverrideTraining
               representation,
               false, Guid.NewGuid(), "Core");
 
-            output.Model.AddElement(core);
+            // 2. Add core to the intermediate collection
+            allCores.Add(core);
+
+            // 3. Check if there are any overrides
+            if (input.Overrides != null && input.Overrides.OverrideCores != null)
+            {
+ 								// 4. Loop over the override collection
+                foreach (OverrideCoresOverride coreOverride in input.Overrides.OverrideCores)
+                {
+                    // 5. find the matching element, based on identity
+                    OverrideCoresIdentity identity = coreOverride.Identity;
+                    // find the core whose Centroid is closest to our Identity
+                    ServiceCore? matchingCore = allCores.OrderBy(
+                      c => c.Centroid.DistanceTo(identity.Centroid))
+                      .FirstOrDefault();
+                    // 6. apply relevant changes
+                    // note that the "Profile" property coming back is not a 
+										// "Profile" element — it's a special "CoresProfile" class
+                    // that only contains a subset of the properties of 
+									  // a Profile.
+                    matchingCore.Profile = new Profile(
+												coreOverride.Value.Profile.Perimeter);
+		                matchingCore.Representation = new Representation(
+												new[] { new Extrude(
+													matchingCore.Profile, height, Vector3.ZAxis, false) });
+										// 7. Add Override Identity to the modified element.
+										Identity.AddOverrideIdentity(
+											matchingCore, 
+											"Cores", 
+											coreOverride.Id, 
+											coreOverride.Identity);
+								}
+            }
+
+            output.Model.AddElements(allCores);
             return output;
         }
       }
