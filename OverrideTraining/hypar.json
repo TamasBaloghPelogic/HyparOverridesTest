@@ -29,5 +29,25 @@
   },
   "element_types": [
     "https://prod-api.hypar.io/schemas/ServiceCore"
-  ]
+  ],
+  "overrides": {
+    "OverrideCores": {
+      "context": "[*discriminator=Elements.ServiceCore]",
+      "identity": {
+        "Centroid" : {
+          "$ref": "https://hypar.io/Schemas/Geometry/Vector3.json"
+        }
+      },
+      "schema": {
+        "Profile": {
+          "type" : "object",
+          "properties": {
+            "Perimeter": {
+              "$ref" : "https://hypar.io/Schemas/Geometry/Polygon.json"
+            }
+          }
+        }
+      }
+    }
+  }
 }
