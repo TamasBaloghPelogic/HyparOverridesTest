@@ -71,15 +71,16 @@ namespace OverrideTraining
         public Overrides() { }
         
         [Newtonsoft.Json.JsonConstructor]
-        public Overrides(IList<OverrideCoresOverride> @overrideCores)
+        public Overrides(IList<OverrideCoresOverride> @overrideCores, IList<ReprColorOverride> @reprColor)
         {
             var validator = Validator.Instance.GetFirstValidatorForType<Overrides>();
             if(validator != null)
             {
-                validator.PreConstruct(new object[]{ @overrideCores});
+                validator.PreConstruct(new object[]{ @overrideCores, @reprColor});
             }
         
             this.OverrideCores = @overrideCores ?? this.OverrideCores;
+            this.ReprColor = @reprColor ?? this.ReprColor;
         
             if(validator != null)
             {
@@ -89,6 +90,9 @@ namespace OverrideTraining
     
         [Newtonsoft.Json.JsonProperty("OverrideCores", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public IList<OverrideCoresOverride> OverrideCores { get; set; } = new List<OverrideCoresOverride>();
+    
+        [Newtonsoft.Json.JsonProperty("ReprColor", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public IList<ReprColorOverride> ReprColor { get; set; } = new List<ReprColorOverride>();
     
     }
     
@@ -124,6 +128,41 @@ namespace OverrideTraining
     
         [Newtonsoft.Json.JsonProperty("Value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public OverrideCoresValue Value { get; set; }
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.21.0 (Newtonsoft.Json v13.0.0.0)")]
+    
+    public partial class ReprColorOverride 
+    
+    {
+        [Newtonsoft.Json.JsonConstructor]
+        public ReprColorOverride(string @id, ReprColorIdentity @identity, ReprColorValue @value)
+        {
+            var validator = Validator.Instance.GetFirstValidatorForType<ReprColorOverride>();
+            if(validator != null)
+            {
+                validator.PreConstruct(new object[]{ @id, @identity, @value});
+            }
+        
+            this.Id = @id;
+            this.Identity = @identity;
+            this.Value = @value;
+        
+            if(validator != null)
+            {
+                validator.PostConstruct(this);
+            }
+        }
+    
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("Identity", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ReprColorIdentity Identity { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("Value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ReprColorValue Value { get; set; }
     
     }
     
@@ -183,6 +222,60 @@ namespace OverrideTraining
     
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.21.0 (Newtonsoft.Json v13.0.0.0)")]
     
+    public partial class ReprColorIdentity 
+    
+    {
+        [Newtonsoft.Json.JsonConstructor]
+        public ReprColorIdentity(Vector3 @centroid)
+        {
+            var validator = Validator.Instance.GetFirstValidatorForType<ReprColorIdentity>();
+            if(validator != null)
+            {
+                validator.PreConstruct(new object[]{ @centroid});
+            }
+        
+            this.Centroid = @centroid;
+        
+            if(validator != null)
+            {
+                validator.PostConstruct(this);
+            }
+        }
+    
+        [Newtonsoft.Json.JsonProperty("Centroid", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public Vector3 Centroid { get; set; }
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.21.0 (Newtonsoft.Json v13.0.0.0)")]
+    
+    public partial class ReprColorValue 
+    
+    {
+        [Newtonsoft.Json.JsonConstructor]
+        public ReprColorValue(ReprColorValueObjectMaterial @objectMaterial)
+        {
+            var validator = Validator.Instance.GetFirstValidatorForType<ReprColorValue>();
+            if(validator != null)
+            {
+                validator.PreConstruct(new object[]{ @objectMaterial});
+            }
+        
+            this.ObjectMaterial = @objectMaterial;
+        
+            if(validator != null)
+            {
+                validator.PostConstruct(this);
+            }
+        }
+    
+        [Newtonsoft.Json.JsonProperty("ObjectMaterial", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ReprColorValueObjectMaterial ObjectMaterial { get; set; }
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.21.0 (Newtonsoft.Json v13.0.0.0)")]
+    
     public partial class OverrideCoresValueProfile 
     
     {
@@ -205,6 +298,41 @@ namespace OverrideTraining
     
         [Newtonsoft.Json.JsonProperty("Perimeter", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public Polygon Perimeter { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.21.0 (Newtonsoft.Json v13.0.0.0)")]
+    
+    public partial class ReprColorValueObjectMaterial 
+    
+    {
+        [Newtonsoft.Json.JsonConstructor]
+        public ReprColorValueObjectMaterial(Material @objectColor)
+        {
+            var validator = Validator.Instance.GetFirstValidatorForType<ReprColorValueObjectMaterial>();
+            if(validator != null)
+            {
+                validator.PreConstruct(new object[]{ @objectColor});
+            }
+        
+            this.ObjectColor = @objectColor;
+        
+            if(validator != null)
+            {
+                validator.PostConstruct(this);
+            }
+        }
+    
+        [Newtonsoft.Json.JsonProperty("ObjectColor", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public Material ObjectColor { get; set; }
     
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
     

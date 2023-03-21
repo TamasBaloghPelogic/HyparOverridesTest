@@ -58,7 +58,7 @@ namespace OverrideTraining
             // 2. Add core to the intermediate collection
             allCores.Add(core);
             allCores.Add(tCore);
-            
+
             // 3. Check if there are any overrides
             if (input.Overrides != null && input.Overrides.OverrideCores != null)
             {
@@ -88,6 +88,23 @@ namespace OverrideTraining
 											coreOverride.Id, 
 											coreOverride.Identity);
 								}
+
+                foreach (ReprColorOverride colorOverride in input.Overrides.ReprColor)
+                {
+                    ReprColorIdentity identity = colorOverride.Identity;
+                    ServiceCore? matchingCore = allCores.OrderBy(
+                      c => c.Centroid.DistanceTo(identity.Centroid))
+                      .FirstOrDefault();
+
+                    Material newMaterial = colorOverride.Value.ObjectMaterial.ObjectColor;
+                    matchingCore.Material = newMaterial;
+
+                    Identity.AddOverrideIdentity(
+                      matchingCore,
+                      "CoresColored",
+                      colorOverride.Id,
+                      colorOverride.Identity);
+                }
             }
 
             output.Model.AddElements(allCores);
