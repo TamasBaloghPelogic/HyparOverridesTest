@@ -1,0 +1,33 @@
+{
+  "$schema": "https://hypar.io/Schemas/Function.json",
+  "id": "4e881490-c288-4228-86e9-7eda4b5506ec",
+  "name": "OverrideTraining",
+  "description": "Testing out overrides",
+  "language": "C#",
+  "outputs": null,
+  "repository_url": "https://github.com/TamasBaloghPelogic/HyparOverridesTest",
+  "last_updated": "0001-01-01T00:00:00",
+  "cli_version": "1.5.0-alpha.6",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "Length": {
+        "type": "number",
+        "description": "The Length.",
+        "minimum": 1.0,
+        "maximum": 20.0,
+        "$hyparUnitType": "length"
+      },
+      "Width": {
+        "type": "number",
+        "description": "The Width.",
+        "minimum": 1.0,
+        "maximum": 20.0,
+        "$hyparUnitType": "length"
+      }
+    }
+  },
+  "element_types": [
+    "https://prod-api.hypar.io/schemas/ServiceCore"
+  ]
+}
