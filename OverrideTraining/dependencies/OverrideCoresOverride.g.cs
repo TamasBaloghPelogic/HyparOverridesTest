@@ -89,6 +89,63 @@ namespace OverrideTraining
             existingElements.Clear();
             existingElements.AddRange(updatedElements);
         }
+
+		/// <summary>
+        /// Create elements from add/removeoverrides, and apply any edits. 
+        /// </summary>
+        /// <param name="edits">The collection of edit overrides (Overrides.OverrideCores)</param>
+        /// <param name="additions">The collection of add overrides (Overrides.Additions.OverrideCores)</param>
+        /// <param name="removals">The collection of remove overrides (Overrides.Removals.OverrideCores)</param>        /// <param name="identityMatch">A function returning a boolean which indicates whether an element is a match for an override's identity.</param>
+        /// <param name="createElement">A function to create a new element, returning the created element.</param>
+        /// <param name="modifyElement">A function to modify a matched element, returning the modified element.</param>
+        /// <param name="existingElements">An optional collection of existing elements to which to apply any edit overrides, or remove if remove overrides are found.</param>
+        /// <typeparam name="T">The element type this override applies to. Should match the type(s) in the override's context.</typeparam>
+        /// <returns>A collection of elements, including new, unmodified, and modified elements from the supplied collection.</returns>
+        public static List<T> CreateElements<T>(
+            this IList<OverrideCoresOverride> edits,
+            IList<OverrideCoresOverrideAddition> additions,
+            IList<OverrideCoresOverrideRemoval> removals,            Func<OverrideCoresOverrideAddition, T> createElement,
+            Func<T, OverrideCoresIdentity, bool> identityMatch,
+            Func<T, OverrideCoresOverride, T> modifyElement,
+            IEnumerable<T> existingElements = null
+            ) where T : Element
+        {
+            List<T> resultElements = existingElements == null ? new List<T>() : new List<T>(existingElements);
+			            if (removals != null)
+            {
+                foreach (var removedElement in removals)
+                {
+                    var elementToRemove = resultElements.FirstOrDefault(e => identityMatch(e, removedElement.Identity));
+                    if (elementToRemove != null)
+                    {
+                        resultElements.Remove(elementToRemove);
+                    }
+                }
+            }            if (additions != null)
+            {
+                foreach (var addedElement in additions)
+                {
+                    var elementToAdd = createElement(addedElement);
+                    resultElements.Add(elementToAdd);
+                    Identity.AddOverrideIdentity(elementToAdd, addedElement);
+                }
+            }
+            if (edits != null)
+            {
+                foreach (var editedElement in edits)
+                {
+                    var elementToEdit = resultElements.FirstOrDefault(e => identityMatch(e, editedElement.Identity));
+                    if (elementToEdit != null)
+                    {
+                        resultElements.Remove(elementToEdit);
+                        var newElement = modifyElement(elementToEdit, editedElement);
+                        resultElements.Add(newElement);
+                        Identity.AddOverrideIdentity(newElement, editedElement);
+                    }
+                }
+            }
+            return resultElements;
+        }
 		
 	}
 

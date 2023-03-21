@@ -89,6 +89,50 @@ namespace OverrideTraining
 											coreOverride.Identity);
 								}
 
+                // ADDITIONS
+                OverrideAdditions additions = input.Overrides.Additions;
+                foreach (OverrideCoresOverrideAddition addable in additions.OverrideCores)
+                {
+                    Polygon newPerimeter = addable.Value.CorePerimeter;
+
+                    Representation newRepresentation = new Representation(
+                      new[] {
+                        new Extrude(newPerimeter, height, Vector3.ZAxis, false)
+                        });
+
+                    ServiceCore newCore = new ServiceCore(
+                      newPerimeter,
+                      elevation: 0,
+                      height,
+                      newPerimeter.Centroid(),
+                      new Transform(),
+                      BuiltInMaterials.Concrete,
+                      newRepresentation,
+                      false, Guid.NewGuid(), "Core");
+
+										Identity.AddOverrideIdentity(
+											newCore, 
+											"Cores", 
+											addable.Id, 
+											addable.Identity);
+
+                    allCores.Add(newCore);
+                }
+
+                // REMOVALS
+                OverrideRemovals removals = input.Overrides.Removals;
+                foreach (OverrideCoresOverrideRemoval removableCore in removals.OverrideCores)
+                {
+                    OverrideCoresIdentity remIdentity = removableCore.Identity;
+
+                    ServiceCore? matchingCore = allCores.OrderBy(
+                      c => c.Centroid.DistanceTo(remIdentity.Centroid))
+                      .FirstOrDefault();
+
+                    if (matchingCore != null)
+                      allCores.Remove(matchingCore);
+                }
+
                 bool weHaveCustomColors = false;
                 foreach (ReprColorOverride colorOverride in input.Overrides.ReprColor)
                 {

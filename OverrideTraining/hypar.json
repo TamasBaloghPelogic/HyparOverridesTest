@@ -51,6 +51,16 @@
             }
           }
         }
+      },
+      "behaviors": {
+        "add": {
+          "schema": {
+            "CorePerimeter": {
+              "$ref": "https://hypar.io/Schemas/Geometry/Polygon.json"
+            }
+          }
+        },
+        "remove": true
       }
     },
     "ReprColor": {
