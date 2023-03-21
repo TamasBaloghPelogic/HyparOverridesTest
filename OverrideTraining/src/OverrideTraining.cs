@@ -89,6 +89,7 @@ namespace OverrideTraining
 											coreOverride.Identity);
 								}
 
+                bool weHaveCustomColors = false;
                 foreach (ReprColorOverride colorOverride in input.Overrides.ReprColor)
                 {
                     ReprColorIdentity identity = colorOverride.Identity;
@@ -104,6 +105,31 @@ namespace OverrideTraining
                       "CoresColored",
                       colorOverride.Id,
                       colorOverride.Identity);
+
+                    weHaveCustomColors = true;
+                }
+
+                foreach (ReprColorGroupOverride grColorOverride in input.Overrides.ReprColorGroup)
+                {
+                    if (weHaveCustomColors)
+                      continue;
+
+                    IList<ReprColorGroupOverrideIdentities> identities = grColorOverride.Identities;
+                    foreach(ReprColorGroupOverrideIdentities grIdentity in identities)
+                    {
+                      ServiceCore? matchingCore = allCores.OrderBy(
+                        c => c.Centroid.DistanceTo(grIdentity.Centroid))
+                        .FirstOrDefault();
+
+                      matchingCore.Material = new Material(); 
+                      matchingCore.Material.Color = new Color("Goldenrod");
+
+                    Identity.AddOverrideIdentity(
+                      matchingCore,
+                      "CoresColoredSameWay",
+                      grColorOverride.Id,
+                      grColorOverride.GetIdentity());
+                    }
                 }
             }
 

@@ -74,6 +74,29 @@
           }
         }
       }
+    },
+    "ReprColorGroup": {
+      "verbs" : {
+        "edit" : "Group modify colour",
+        "revert" : "Reset to Default"
+      },
+      "context": "[*discriminator=Elements.ServiceCore]",
+      "paradigm": "group",
+      "identity": {
+        "Centroid" : {
+          "$ref" : "https://hypar.io/Schemas/Geometry/Vector3.json"
+        }
+      },
+      "schema": {
+        "ObjectMaterial" : {
+          "type" : "object",
+          "properties": {
+            "ObjectColor" : {
+              "$ref": "https://schemas.hypar.io/Material.json"
+            }
+          }
+        }
+      }
     }
   }
 }
