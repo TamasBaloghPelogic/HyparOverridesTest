@@ -18,9 +18,17 @@ namespace OverrideTraining
             OverrideTrainingOutputs output = new OverrideTrainingOutputs();
 						double height = 4.0;
             Polygon rectangle = Polygon.Rectangle(input.Length, input.Width);
+            Transform translate = new Transform();
+            translate = translate.Moved(10,10,0);
+            Polygon offsetRectangle = rectangle.TransformedPolygon(translate);
             Representation representation = new Representation(
               new[] {
                 new Extrude(rectangle, height, Vector3.ZAxis, false)
+                });
+
+            Representation tRepr = new Representation(
+              new[] {
+                new Extrude(offsetRectangle, height, Vector3.ZAxis, false)
                 });
 
             // 1. Create an intermediate collection to store any 
@@ -37,9 +45,20 @@ namespace OverrideTraining
               representation,
               false, Guid.NewGuid(), "Core");
 
+            ServiceCore tCore = new ServiceCore(
+              offsetRectangle,
+              elevation: 0,
+              height,
+              offsetRectangle.Centroid(),
+              new Transform(),
+              BuiltInMaterials.Concrete,
+              tRepr,
+              false, Guid.NewGuid(), "Core 2");
+
             // 2. Add core to the intermediate collection
             allCores.Add(core);
-
+            allCores.Add(tCore);
+            
             // 3. Check if there are any overrides
             if (input.Overrides != null && input.Overrides.OverrideCores != null)
             {

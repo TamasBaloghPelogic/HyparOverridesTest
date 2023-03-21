@@ -32,6 +32,10 @@
   ],
   "overrides": {
     "OverrideCores": {
+        "verbs": {
+          "edit": "Modify Core Base Profile",
+          "revert": "Reset Base Profile"
+      },
       "context": "[*discriminator=Elements.ServiceCore]",
       "identity": {
         "Centroid" : {
